@@ -6,7 +6,11 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("<h1>Witaj</h1>")
+    return render(request, 'index.html')
 
-def rezerwacje(request):
-    return HttpResponse("<h1> Rezerwacje </h1> <br> <h2> Robimy stronke mordo </h2>")
+def about(request):
+    return render(request, 'about.html')
+
+def contact(request):
+    return render(request, 'contact.html')
+
