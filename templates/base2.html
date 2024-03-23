@@ -18,8 +18,8 @@
     </header>
     <nav>
         <a href="{% url 'index' %}">Strona główna</a> | 
-        <a href="{% url 'register' %}">Rejestracja</a> | 
-        <a href="{% url 'login' %}">Zaloguj się</a>
+        <a href="{% url 'user_profile' %}">Twój profil</a> |
+        <a href="{% url 'logout' %}">Wyloguj się</a>
     </nav>
     <main>
         {% block content %}
