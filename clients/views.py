@@ -56,10 +56,20 @@ def account_settings(request):
 def reservation_planning(request):
     base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
     if request.method == 'POST':
-        # Scal konteksty do jednego słownika
+        # Pobieranie danych z formularza
+        start_date = request.POST.get('start-date')
+        end_date = request.POST.get('end-date')
+        adults = request.POST.get('adults')
+        children = request.POST.get('children')
+        
+        # Dodawanie danych formularza do kontekstu
         context = {
             'base_template': base_template,
-            'user': request.user
+            'user': request.user,
+            'start_date': start_date,
+            'end_date': end_date,
+            'adults': adults,
+            'children': children,
         }
         return render(request, 'reservation_planning.html', context)
     else:

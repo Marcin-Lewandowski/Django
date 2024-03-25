@@ -17,18 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from clients.views import reservation_planning
+
+
 
 
 urlpatterns = [
-    path("", views.index, name='index'),
-    path("about", views.about, name='about'),
-    path("contact", views.contact, name='contact'),
+    path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
     
-    path("booking/", include("booking.urls")),
-    path("clients/", include("clients.urls")),
-    path("profile/", include("clients.urls")),
-    path("reservation_planning/", include("clients.urls")),
+    # Dołączanie URL-i z aplikacji booking
+    path('booking/', include('booking.urls')),
     
-    path('admin/', admin.site.urls),  # To zapewnia dostęp do panelu administracyjnego 
+    # Dołączanie URL-i z aplikacji clients
+    path('clients/', include('clients.urls')),
+    
+    #path('reservation_planning/', include('clients.urls')),
+    path('reservation_planning/', reservation_planning, name='reservation_planning'),
 ]
-
