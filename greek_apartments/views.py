@@ -6,11 +6,16 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return render(request, 'index.html')
+    base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
+    return render(request, 'index.html', {'base_template': base_template})
 
 def about(request):
-    return render(request, 'about.html')
+    base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
+    return render(request, 'about.html', {'base_template': base_template})
+
+
+
 
 def contact(request):
-    return render(request, 'contact.html')
-
+    base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
+    return render(request, 'contact.html', {'base_template': base_template})

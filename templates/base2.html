@@ -4,9 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Witaj</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#start-date, #end-date").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    });
+    </script>
+
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; }
-        header, footer { background: #333; color: #fff; text-align: center; padding: 1em 0; }
+        header, footer { background: rgb(130, 160, 243); color: #fff; text-align: center; padding: 1em 0; }
         nav { background: #ccc; padding: 0.5em 0; }
         nav a { margin: 0 1em; text-decoration: none; color: #333; }
         main { padding: 2em; }
@@ -18,10 +33,38 @@
     </header>
     <nav>
         <a href="{% url 'index' %}">Strona główna</a> | 
-        <a href="{% url 'user_profile' %}">Twój profil</a> |
+        <a href="{% url 'user_profile' %}">Twój profil</a> | 
+        <a href="{% url 'my_reservations' %}">Moje rezerwacje</a> | 
+        <a href="{% url 'search_rooms' %}">Szukaj pokoi</a> | 
+        <a href="{% url 'special_offers' %}">Specjalne oferty</a> | 
+        <a href="{% url 'submit_review' %}">Oceń pobyt</a> | 
+        <a href="{% url 'account_settings' %}">Ustawienia konta</a> | 
         <a href="{% url 'logout' %}">Wyloguj się</a>
     </nav>
     <main>
+        <form action="/reservation_planning/" method="post" class="search-bar">
+            {% csrf_token %}
+            <label for="start-date">Data rozpoczęcia:</label>
+            <input type="text" id="start-date" name="start-date" required><br><br>
+            
+            <label for="end-date">Data zakończenia:</label>
+            <input type="text" id="end-date" name="end-date" required><br><br>
+            
+            <label for="adults">Liczba dorosłych:</label>
+            <select id="adults" name="adults">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select><br><br>
+            
+            <label for="children">Liczba dzieci:</label>
+            <select id="children" name="children">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select><br><br>
+            
+            <button type="submit">Wyszukaj</button>
+        </form>
         {% block content %}
 
         {% endblock %}

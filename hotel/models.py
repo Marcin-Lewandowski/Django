@@ -10,41 +10,68 @@ User = get_user_model()
 
 class Room(models.Model):
     ROOM_TYPES = [
-        ('single', 'Jednoosobowy'),
-        ('double', 'Dwuosobowy'),
-        ('suite', 'Apartament'),
-        # Dodaj więcej typów pokoi zgodnie z potrzebami
+        ('single', 'Double'),
+        ('double', 'Twin'),
+        ('suite', 'Trio'),
+        ('family', 'Family') 
     ]
     
-    number = models.CharField(max_length=10, unique=True, verbose_name="Numer pokoju")
-    room_type = models.CharField(max_length=10, choices=ROOM_TYPES, verbose_name="Typ pokoju")
-    capacity = models.IntegerField(verbose_name="Pojemność")
-    beds = models.IntegerField(verbose_name="Liczba łóżek")
-    price_per_night = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Cena za noc")
-    available = models.BooleanField(default=True, verbose_name="Dostępność")
-    amenities = models.TextField(blank=True, verbose_name="Udogodnienia")
+    ROOM_NUMBERS = [
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        (6, '6'),
+        (7, '7'),
+        (8, '8'),
+        (9, '9'),
+        (10, '10'),
+    ]
+    
+    ROOM_CAPACITY = [
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+    ]
+    
+    ROOM_BEDS = [
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+    ]
+    
+    number = models.CharField(max_length=10, unique=True, choices=ROOM_NUMBERS, verbose_name="Room number")
+    room_type = models.CharField(max_length=10, choices=ROOM_TYPES, verbose_name="Room type")
+    capacity = models.IntegerField(choices=ROOM_CAPACITY, verbose_name="Capacity")
+    beds = models.IntegerField(choices=ROOM_BEDS, verbose_name="Number of beds")
+    price_per_night = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Price per night")
+    available = models.BooleanField(default=True, verbose_name="Available")
+    amenities = models.TextField(blank=True, verbose_name="Amenities")
 
     def __str__(self):
-        return f"Pokój {self.number} - {self.get_room_type_display()}"
+        if self.beds == 1:
+            return f"Room No {self.number} - {self.get_room_type_display()} - {self.get_beds_display()} bed - Capacity {self.get_capacity_display()} "
+        else:
+            return f"Room No {self.number} - {self.get_room_type_display()} - {self.get_beds_display()} beds - Capacity {self.get_capacity_display()} "
 
-    class Meta:
-        verbose_name = "pokój"
-        verbose_name_plural = "pokoje"
+   
         
         
 
 class Reservation(models.Model):
     STATUS_CHOICES = [
-        ('confirmed', 'Potwierdzona'),
-        ('cancelled', 'Anulowana'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
     ]
     PAYMENT_STATUS_CHOICES = [
-        ('paid', 'Zapłacono'),
-        ('pending', 'Oczekuje na płatność'),
-        ('cancelled', 'Anulowano płatność'),
+        ('paid', 'Paid'),
+        ('pending', 'Payment pending'),
+        ('cancelled', 'Payment canceled'),
     ]
     SERVICE_TYPE_CHOICES = [
-        ('standard', 'Standardowy'),
+        ('standard', 'Standard'),
         ('premium', 'Premium'),
         # Dodaj więcej według potrzeb
     ]
@@ -69,22 +96,21 @@ class Reservation(models.Model):
     confirmation_code = models.CharField(max_length=50, unique=True)
     contact_email = models.EmailField()
     contact_phone = models.CharField(max_length=20)
+    customer_review = models.TextField(blank=True, null=True, verbose_name="Customer review")
     special_requests = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"Room reservation for {self.user} - {self.room}: Number of guests - {self.number_of_guests} "
 
     def clean(self):
-        # Sprawdzenie, czy data rozpoczęcia jest wcześniejsza niż data zakończenia
+        # Checking if the start date is earlier than the end date
         if self.start_date and self.end_date and self.start_date >= self.end_date:
-            raise ValidationError("Data rozpoczęcia musi być wcześniejsza niż data zakończenia.")
+            raise ValidationError("The start date must be earlier than the end date.")
 
-        # Możesz dodać więcej walidacji zgodnie z potrzebami
 
     def save(self, *args, **kwargs):
         self.full_clean()
         super(Reservation, self).save(*args, **kwargs)
 
-    class Meta:
-        # Opcjonalnie możesz dodać dodatkowe ustawienia, np. ordering, jeśli potrzebujesz
-        ordering = ['start_date']
-
-
+   

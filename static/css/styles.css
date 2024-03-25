@@ -1,0 +1,13 @@
+form.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Odstępy między elementami */
+}
+form.search-bar label {
+    margin-right: 5px;
+}
+form.search-bar input, 
+form.search-bar select, 
+form.search-bar button {
+    margin: 5px 0;
+}

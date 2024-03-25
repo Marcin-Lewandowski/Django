@@ -27,6 +27,7 @@ urlpatterns = [
     path("booking/", include("booking.urls")),
     path("clients/", include("clients.urls")),
     path("profile/", include("clients.urls")),
+    path("reservation_planning/", include("clients.urls")),
     
     path('admin/', admin.site.urls),  # To zapewnia dostęp do panelu administracyjnego 
 ]
