@@ -36,33 +36,21 @@ def my_reservations(request):
 
 
 @login_required
-def search_rooms(request):
-    return render(request, 'search_rooms.html', {'user': request.user})
-
-@login_required
-def special_offers(request):
-    return render(request, 'special_offers.html', {'user': request.user})
-
-
-@login_required
 def submit_review(request):
     return render(request, 'submit_review.html', {'user': request.user})
 
-@login_required
-def account_settings(request):
-    return render(request, 'account_settings.html', {'user': request.user})
 
 
 def reservation_planning(request):
     base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
     if request.method == 'POST':
-        # Pobieranie danych z formularza
+        # Retrieving data from a form
         start_date = request.POST.get('start-date')
         end_date = request.POST.get('end-date')
         adults = request.POST.get('adults')
         children = request.POST.get('children')
         
-        # Dodawanie danych formularza do kontekstu
+        # Adding form data to the context
         context = {
             'base_template': base_template,
             'user': request.user,
@@ -73,4 +61,4 @@ def reservation_planning(request):
         }
         return render(request, 'reservation_planning.html', context)
     else:
-        return HttpResponse("To żądanie powinno być metodą POST.")
+        return HttpResponse("This request should be a POST method.")

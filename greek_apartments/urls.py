@@ -17,9 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
-from clients.views import reservation_planning
-
-
+from clients.views import reservation_planning, user_profile
 
 
 urlpatterns = [
@@ -27,13 +25,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
-    
-    # Dołączanie URL-i z aplikacji booking
+    path('profile/', user_profile, name='user_profile'),
     path('booking/', include('booking.urls')),
-    
-    # Dołączanie URL-i z aplikacji clients
     path('clients/', include('clients.urls')),
-    
-    #path('reservation_planning/', include('clients.urls')),
     path('reservation_planning/', reservation_planning, name='reservation_planning'),
 ]

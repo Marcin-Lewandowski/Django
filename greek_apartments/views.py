@@ -14,8 +14,6 @@ def about(request):
     return render(request, 'about.html', {'base_template': base_template})
 
 
-
-
 def contact(request):
     base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
     return render(request, 'contact.html', {'base_template': base_template})

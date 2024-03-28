@@ -1,6 +1,5 @@
 
 from django.db import models
-#from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
@@ -17,17 +16,20 @@ class Room(models.Model):
     ]
     
     ROOM_NUMBERS = [
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-        (5, '5'),
-        (6, '6'),
-        (7, '7'),
-        (8, '8'),
-        (9, '9'),
-        (10, '10'),
-    ]
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    ('6', '6'),
+    ('7', '7'),
+    ('8', '8'),
+    ('9', '9'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12'),
+]
+
     
     ROOM_CAPACITY = [
         (1, '1'),
@@ -73,7 +75,6 @@ class Reservation(models.Model):
     SERVICE_TYPE_CHOICES = [
         ('standard', 'Standard'),
         ('premium', 'Premium'),
-        # Dodaj więcej według potrzeb
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')

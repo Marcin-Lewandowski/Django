@@ -1,13 +1,57 @@
-form.search-bar {
+.search-bar {
     display: flex;
-    align-items: center;
-    gap: 10px; /* Odstępy między elementami */
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    gap: 10px; 
+    border: 2px solid gray; 
+    padding: 10px; 
 }
-form.search-bar label {
-    margin-right: 5px;
+
+.search-bar .date-range {
+    display: flex;
+    flex-direction: row; 
+    gap: 75px; 
 }
-form.search-bar input, 
-form.search-bar select, 
-form.search-bar button {
-    margin: 5px 0;
+
+.search-bar label {
+    margin-right: 5px; 
+}
+
+.search-bar button {
+    margin-top: 35px; 
+    flex-grow: 1; 
+}
+
+.search-bar input[type="text"], 
+.search-bar select {
+    flex: none; 
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header, footer {
+    background: rgb(130, 160, 243);
+    color: #fff;
+    text-align: center;
+    padding: 1em 0;
+}
+
+nav {
+    background: rgb(50,255,255);
+    padding: 0.5em 0;
+}
+
+nav a {
+    margin: 0 1em;
+    text-decoration: none;
+    color: #000;
+}
+
+main {
+    padding: 2em;
 }

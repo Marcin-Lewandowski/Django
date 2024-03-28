@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Witaj</title>
+    <title>Welcome to Greek Apartments</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
     {% load static %}
 
@@ -19,47 +19,45 @@
     });
     </script>
 
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        header, footer { background: rgb(130, 160, 243); color: #fff; text-align: center; padding: 1em 0; }
-        nav { background: #ccc; padding: 0.5em 0; }
-        nav a { margin: 0 1em; text-decoration: none; color: #333; }
-        main { padding: 2em; }
-    </style>
+    
 </head>
 <body>
     <header>
-        <h1>Witaj w Greek Apartments</h1>
+        <h1>Welcome to Greek Apartments</h1>
     </header>
     <nav>
-        <a href="{% url 'index' %}">Strona główna</a> | 
-        <a href="{% url 'register' %}">Rejestracja</a> | 
-        <a href="{% url 'login' %}">Zaloguj się</a>
+        <a href="{% url 'index' %}">Home</a> | 
+        <a href="{% url 'register' %}">Register</a> | 
+        <a href="{% url 'login' %}">Log in</a>
     </nav>
     <main>
-        <form action="/reservation_planning/" method="post" class="search-bar">
-            {% csrf_token %}
-            <label for="start-date">Data rozpoczęcia:</label>
-            <input type="text" id="start-date" name="start-date" required><br><br>
-            
-            <label for="end-date">Data zakończenia:</label>
-            <input type="text" id="end-date" name="end-date" required><br><br>
-            
-            <label for="adults">Liczba dorosłych:</label>
-            <select id="adults" name="adults">
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select><br><br>
-            
-            <label for="children">Liczba dzieci:</label>
-            <select id="children" name="children">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select><br><br>
-            
-            <button type="submit">Wyszukaj</button>
-        </form>
+        <div >
+            <form action="/reservation_planning/" method="post" class="search-bar">
+                {% csrf_token %}
+                <div class="date-range">
+                    <label for="start-date">Start date:</label>
+                    <input type="text" id="start-date" name="start-date" autocomplete="off" required><br><br>
+                    
+                    <label for="end-date">End date:</label>
+                    <input type="text" id="end-date" name="end-date"  autocomplete="off" required><br><br>
+                </div>
+                
+                <label for="adults">Adults:</label>
+                <select id="adults" name="adults">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select><br><br>
+                
+                <label for="children">Children:</label>
+                <select id="children" name="children">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select><br><br>
+                
+                <button type="submit">Check availability</button>
+            </form>
+        </div>
 
         {% block content %}
 
@@ -68,11 +66,11 @@
     </main>
 
     <nav>
-        <a href="{% url 'about' %}">O nas</a> | 
-        <a href="{% url 'contact' %}">Kontakt</a>  | 
+        <a href="{% url 'about' %}">About</a> | 
+        <a href="{% url 'contact' %}">Contact</a>
     </nav>
     <footer>
-        <p>&copy; 2024 Witaj w serwisie. Wszystkie prawa zastrzeżone.</p>
+        <p>&copy; 2024 Welcome to the website. All rights reserved.</p>
     </footer>
 </body>
 </html>

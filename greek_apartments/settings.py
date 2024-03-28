@@ -85,8 +85,8 @@ DATABASES = {
         'NAME': 'greek_apartments_db',
         'USER': 'postgres',
         'PASSWORD': 'grecki44',
-        'HOST': 'localhost',  # Lub adres serwera bazy danych
-        'PORT': '5432',  # Domyślny port PostgreSQL
+        'HOST': 'localhost',  # or database server address
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
 
@@ -129,7 +129,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    # Dodaj tutaj inne ścieżki, jeśli masz więcej katalogów ze statycznymi plikami
 ]
 
 # Default primary key field type
@@ -141,8 +140,6 @@ LOGIN_REDIRECT_URL = '/profile/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  
 
-SESSION_COOKIE_AGE = 7200  # session time
+SESSION_COOKIE_AGE = 21600  # session time
 
 SESSION_SAVE_EVERY_REQUEST = True  # session time refresh
-
-
