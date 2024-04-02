@@ -11,9 +11,12 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+    
     <script>
     $(document).ready(function(){
-        $("#start-date, #end-date").datepicker({
+        $("#start_date, #end_date").datepicker({
             dateFormat: "yy-mm-dd"
         });
     });
@@ -33,34 +36,6 @@
         <a href="{% url 'logout' %}">Logout</a>
     </nav>
     <main>
-        <div >
-            <form action="/reservation_planning/" method="post" class="search-bar">
-                {% csrf_token %}
-                <div class="date-range">
-                    <label for="start-date">Start date:</label>
-                    <input type="text" id="start-date" name="start-date" autocomplete="off" required><br><br>
-                    
-                    <label for="end-date">End date:</label>
-                    <input type="text" id="end-date" name="end-date" autocomplete="off" required><br><br>
-                </div>
-                
-                <label for="adults">Adults:</label>
-                <select id="adults" name="adults">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select><br><br>
-                
-                <label for="children">Children:</label>
-                <select id="children" name="children">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select><br><br>
-                
-                <button type="submit">check availability</button>
-            </form>
-        </div>
-        
 
         {% block content %}
 

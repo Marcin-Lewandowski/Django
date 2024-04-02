@@ -5,11 +5,55 @@
 {% block content %}
 
 
-<h3>Hello</h3>
+<h3>Hello {{ user.username }}</h3>
 <p>This is a sample index.html page for your Django project.</p>
 
+<div>
+    <form action="/reservation_planning/" method="post" class="search-bar" id="reservationForm">
+        {% csrf_token %}
+        <div class="date-range">
+            <label for="start_date">Start date:</label>
+            <input type="text" id="start_date" name="start_date" autocomplete="off" required><br><br>
+            
+            <label for="end_date">End date:</label>
+            <input type="text" id="end_date" name="end_date"  autocomplete="off" required><br><br>
+        </div>
+        
+        <label for="adults">Adults:</label>
+        <select id="adults" name="adults">
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select><br><br>
+        
+        <label for="children">Children:</label>
+        <select id="children" name="children">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select><br><br>
+        
+        <button type="submit">Check availability</button>
+    </form>
+
+    
+    <script>
+        const form = document.getElementById('reservationForm');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                const startDate = document.getElementById('start_date').value;
+                const endDate = document.getElementById('end_date').value;
+                const adults = document.getElementById('adults').value;
+                const children = document.getElementById('children').value;
+
+                saveSelectionToLocalStorage(startDate, endDate, adults, children);
+                console.log(startDate, endDate, adults, children);
+                
+            });
+        } else {
+            console.error('The form was not found');
+        }
+    </script>
+
+</div>
+
 {% endblock %}
-
-
-
-

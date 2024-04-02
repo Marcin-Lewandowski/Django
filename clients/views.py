@@ -4,6 +4,8 @@ from django.contrib.auth import login, logout, authenticate
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from hotel.models import check_room_availability
+from django.utils.dateparse import parse_datetime
 
 
 
@@ -41,24 +43,48 @@ def submit_review(request):
 
 
 
+
+
 def reservation_planning(request):
     base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
     if request.method == 'POST':
-        # Retrieving data from a form
-        start_date = request.POST.get('start-date')
-        end_date = request.POST.get('end-date')
-        adults = request.POST.get('adults')
-        children = request.POST.get('children')
         
-        # Adding form data to the context
-        context = {
-            'base_template': base_template,
-            'user': request.user,
-            'start_date': start_date,
-            'end_date': end_date,
-            'adults': adults,
-            'children': children,
-        }
-        return render(request, 'reservation_planning.html', context)
+        # Retrieving and converting data from the form
+        start_date = parse_datetime(request.POST.get('start_date'))
+        end_date = parse_datetime(request.POST.get('end_date'))
+        adults = int(request.POST.get('adults', 0))  
+        children = int(request.POST.get('children', 0))  
+        
+        number_of_guests = adults + children
+        
+        if start_date < end_date:
+        
+            # Checking room availability
+            available_rooms = check_room_availability(start_date, end_date, number_of_guests)
+            
+            # Adding form data and available rooms to the context
+            context = {
+                'base_template': base_template,
+                'user': request.user,
+                'start_date': start_date,
+                'end_date': end_date,
+                'adults': adults,
+                'children': children,
+                'number_of_guests': number_of_guests,
+                'available_rooms': available_rooms,
+            }
+            return render(request, 'reservation_planning.html', context)
+        else:
+            context = {
+                'base_template': base_template,
+                'user': request.user,
+                'start_date': start_date,
+                'end_date': end_date,
+                'adults': adults,
+                'children': children,
+                'number_of_guests': number_of_guests,
+            }
+            return render(request, 'adjust_planning.html', context)
+            
     else:
         return HttpResponse("This request should be a POST method.")

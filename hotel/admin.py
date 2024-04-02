@@ -1,7 +1,11 @@
 from django.contrib import admin
-from .models import Reservation,Room
+from .models import Reservation, Room
 
-# Register your models here.
 
-admin.site.register(Reservation)
 admin.site.register(Room)
+
+
+@admin.register(Reservation)
+class ReservationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'room', 'number_of_guests', 'start_date', 'end_date', 'status')
+

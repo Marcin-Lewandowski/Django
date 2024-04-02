@@ -2,6 +2,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from datetime import timedelta, datetime, time
+from django.db.models import Q
 
 
 User = get_user_model()
@@ -76,6 +78,33 @@ class Reservation(models.Model):
         ('standard', 'Standard'),
         ('premium', 'Premium'),
     ]
+    ROOM_TYPES = [
+        ('single', 'Double'),
+        ('double', 'Twin'),
+        ('suite', 'Trio'),
+        ('family', 'Family') 
+    ]
+    ROOM_NUMBERS = [
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    ('6', '6'),
+    ('7', '7'),
+    ('8', '8'),
+    ('9', '9'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12'),
+    ]
+    
+    GUESTS_NUMBERS = [
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+    ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
     room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True, related_name='reservations')
@@ -86,10 +115,10 @@ class Reservation(models.Model):
     is_cancelled = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    room_type = models.CharField(max_length=50)
-    room_number = models.CharField(max_length=10)
+    room_type = models.CharField(max_length=10, choices=ROOM_TYPES, verbose_name="Room type")
+    room_number = models.CharField(max_length=10, unique=True, choices=ROOM_NUMBERS, verbose_name="Room number")
     service_type = models.CharField(max_length=50, choices=SERVICE_TYPE_CHOICES)
-    number_of_guests = models.IntegerField()
+    number_of_guests = models.IntegerField(choices=GUESTS_NUMBERS, verbose_name="Guests numbers")
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     payment_status = models.CharField(max_length=30, choices=PAYMENT_STATUS_CHOICES)
     check_in_out_verified = models.BooleanField(default=False)
@@ -115,3 +144,39 @@ class Reservation(models.Model):
         super(Reservation, self).save(*args, **kwargs)
 
    
+CHECK_IN_HOUR = 14  # 14:00 or 2 PM
+CHECK_OUT_HOUR = 11  # 11:00 AM
+
+def adjust_check_in_date(date):
+    """Adjusts the given date to the standard check-in time."""
+    return datetime.combine(date, time(CHECK_IN_HOUR, 0))
+
+def adjust_check_out_date(date):
+    """Adjusts the given date to the standard check-out time."""
+    return datetime.combine(date, time(CHECK_OUT_HOUR, 0)) 
+   
+   
+   
+
+
+def check_room_availability(start_date, end_date, number_of_guests):
+    start_date = adjust_check_in_date(start_date)
+    end_date = adjust_check_out_date(end_date)
+
+    # We filter rooms that can accommodate the appropriate number of guests
+    potential_rooms = Room.objects.filter(capacity__gte=number_of_guests)
+
+    # We are looking for reservations that match the selected period
+    conflicting_reservations = Reservation.objects.filter(
+        room__in=potential_rooms,
+        # We check for overlapping dates
+        end_date__gt=adjust_check_in_date(start_date),  # Reservations that end after scheduled check-in
+        start_date__lt=adjust_check_out_date(end_date),  # Reservations that start before your scheduled check-out
+    
+        status='confirmed'
+    ).values_list('room', flat=True)
+
+    # We exclude rooms with conflicting reservations
+    available_rooms = potential_rooms.exclude(id__in=conflicting_reservations)
+
+    return available_rooms

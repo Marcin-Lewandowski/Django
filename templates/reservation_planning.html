@@ -3,15 +3,50 @@
 {% extends base_template %}
 
 {% block content %}
+{% load static %}
+
 <h2>Reservation ...</h2>
-<p>Reservation planning in progress ...</p>
-    
+<p>{{ user.username }} Your Reservation planning is in progress ...</p>
+
+{% if user.is_authenticated %}
+<p>User: {{ user.username }}</p>
+{% else %}
+<p>User: Guest</p>
+{% endif %}
+
 <p>Start date: {{ start_date }}</p>
 <p>End date: {{ end_date }}</p>
 <p>Adults: {{ adults }}</p>
 <p>Children: {{ children }}</p>
 
-
-<p>To be continued . . . </p>
+<!-- Table with available rooms -->
+<table>
+    <thead>
+        <tr>
+            <th>Room Number</th>
+            <th>Room Type</th>
+            <th>Capacity</th>
+            <th>Number of Beds</th>
+            <th>Price Per Night</th>
+            <th>Amenities</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in available_rooms %}
+            <tr>
+                <td>{{ room.number }}</td>
+                <td>{{ room.get_room_type_display }}</td>
+                <td>{{ room.capacity }}</td>
+                <td>{{ room.beds }}</td>
+                <td>{{ room.price_per_night }}</td>
+                <td>{{ room.amenities }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">No rooms available for your search criteria.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
