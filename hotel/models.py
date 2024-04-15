@@ -12,7 +12,7 @@ class Hotel(models.Model):
     updated = models.DateTimeField(auto_now = True, blank = True)
 
     def __str__(self):
-        return self.hotel
+        return self.name
     
 class Room(models.Model):
     ROOM_TYPES = [
