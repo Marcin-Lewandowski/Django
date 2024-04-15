@@ -3,6 +3,8 @@ from django.urls import path, include, reverse_lazy
 from . import views
 from django.contrib.auth.views import LoginView
 
+from .views import ReservationPlanningAPIView
+
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
@@ -19,6 +21,7 @@ urlpatterns = [
     
     path('my_reservations/', views.my_reservations, name='my_reservations'),
     path('submit_review/', views.submit_review, name='submit_review'),
-    path('reservation_planning/', views.reservation_planning, name='reservation_planning'),  
+    path('reservation_planning/', views.reservation_planning, name='reservation_planning'),
+    path('api/reservation-planning/', ReservationPlanningAPIView.as_view(), name='reservation-planning-api'),
 ]
 

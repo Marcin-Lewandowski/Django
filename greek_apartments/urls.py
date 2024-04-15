@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 from clients.views import reservation_planning, user_profile
+from clients.views import ReservationPlanningAPIView
 
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     path('booking/', include('booking.urls')),
     path('clients/', include('clients.urls')),
     path('reservation_planning/', reservation_planning, name='reservation_planning'),
+    path('api/reservation-planning/', ReservationPlanningAPIView.as_view(), name='reservation-planning-api'),
 ]

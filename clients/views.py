@@ -7,6 +7,11 @@ from django.http import HttpResponse
 from hotel.models import check_room_availability
 from django.utils.dateparse import parse_datetime
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from hotel.models import Room
+from hotel.serializers import RoomSerializer
+
 
 
 def register(request):
@@ -44,7 +49,7 @@ def submit_review(request):
 
 
 
-
+# old function
 def reservation_planning(request):
     base_template = 'base2.html' if request.user.is_authenticated else 'base.html'
     if request.method == 'POST':
@@ -88,3 +93,31 @@ def reservation_planning(request):
             
     else:
         return HttpResponse("This request should be a POST method.")
+    
+    
+    
+class ReservationPlanningAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        start_date = parse_datetime(request.POST.get('start_date'))
+        end_date = parse_datetime(request.POST.get('end_date'))
+        adults = int(request.POST.get('adults', 0))  
+        children = int(request.POST.get('children', 0)) 
+        
+        if not start_date or not end_date:
+            return Response({"error": "Invalid dates provided"}, status=400)
+        
+        if adults < 0 or children < 0:
+            return Response({"error": "Number of adults or children cannot be negative"}, status=400)
+        
+        if start_date >= end_date:
+            return Response({"error": "Start date must be before end date"}, status=400)
+        
+        
+        number_of_guests = adults + children
+        available_rooms = check_room_availability(start_date, end_date, number_of_guests)
+        
+        
+        serializer = RoomSerializer(available_rooms, many=True)
+        return Response(serializer.data)
+            
+    
