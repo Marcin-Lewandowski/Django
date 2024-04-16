@@ -4,11 +4,16 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from datetime import timedelta, datetime, time
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 
-User = get_user_model()
+class Hotel(models.Model):
+    name = models.CharField(max_length = 100)
+    updated = models.DateTimeField(auto_now = True, blank = True)
 
-
+    def __str__(self):
+        return self.name
+    
 class Room(models.Model):
     ROOM_TYPES = [
         ('single', 'Double'),
@@ -53,6 +58,7 @@ class Room(models.Model):
     price_per_night = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Price per night")
     available = models.BooleanField(default=True, verbose_name="Available")
     amenities = models.TextField(blank=True, verbose_name="Amenities")
+    hotel = models.ForeignKey(Hotel, on_delete = models.CASCADE, blank = True, null = True)
 
     def __str__(self):
         if self.beds == 1:
