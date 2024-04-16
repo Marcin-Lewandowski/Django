@@ -39,9 +39,13 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     
-    # DJANGO
+    #api routes
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
+    path('api/v1/', include([
+        path('', include('hotel.urls')),
+    ])),
+
+    #old routes
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
@@ -50,9 +54,4 @@ urlpatterns = [
     path('clients/', include('clients.urls')),
     path('reservation_planning/', reservation_planning, name='reservation_planning'),
     path('api/reservation-planning/', ReservationPlanningAPIView.as_view(), name='reservation-planning-api'),
-=======
-    path('api/v1/', include([
-        path('', include('hotel.urls')),
-    ])),
->>>>>>> develop
 ]
