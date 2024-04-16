@@ -1,10 +1,11 @@
 from rest_framework import generics, permissions
 from .models import Hotel, Reservation, Room
 from .serializer import HotelSerializer, ReservationSerializer, RoomSerializer
+from rest_framework.permissions import IsAuthenticated
 
 # Bazowa klasa dla APIView z często używanymi metodami
 class BaseView:
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, model, pk):
         try:

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'greek_apartments',
     'rest_framework',
+    'drf_yasg'
 ]
 
 REST_FRAMEWORK = {
