@@ -19,12 +19,22 @@ from django.urls import path, include
 from . import views
 from clients.views import reservation_planning, user_profile
 from hotel import urls as hotel_urls
+from clients.views import ReservationPlanningAPIView
+
 
 urlpatterns = [
+    #api routes
     path('admin/', admin.site.urls),
     path('api/v1/', include([
         path('', include('hotel.urls')),
-        path('', include('hotel.urls')),
-        path('', include('hotel.urls')),
     ])),
+    #old routes
+    path('', views.index, name='index'),
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
+    path('profile/', user_profile, name='user_profile'),
+    path('booking/', include('booking.urls')),
+    path('clients/', include('clients.urls')),
+    path('reservation_planning/', reservation_planning, name='reservation_planning'),
+    path('api/reservation-planning/', ReservationPlanningAPIView.as_view(), name='reservation-planning-api'),
 ]

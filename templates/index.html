@@ -9,7 +9,7 @@
 <p>This is a sample index.html page for your Django project.</p>
 
 <div>
-    <form action="/reservation_planning/" method="post" class="search-bar" id="reservationForm">
+    <form  class="search-bar" id="reservationForm">
         {% csrf_token %}
         <div class="date-range">
             <label for="start_date">Start date:</label>
@@ -34,6 +34,69 @@
         
         <button type="submit">Check availability</button>
     </form>
+
+    <script>
+        document.getElementById('reservationForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Zatrzymuje standardowe wysłanie formularza
+        
+            var data = {
+                'start_date': document.getElementById('start_date').value,
+                'end_date': document.getElementById('end_date').value,
+                'adults': document.getElementById('adults').value,
+                'children': document.getElementById('children').value
+            };
+        
+            fetch('/api/reservation-planning/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                const results = document.getElementById('resultsTable');
+                if (results) {
+                    results.remove();
+                }
+
+                // Tworzenie tabeli z wynikami
+                const table = document.createElement('table');
+                table.id = 'resultsTable';
+                table.innerHTML = `
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Room Type</th>
+                        <th>Capacity</th>
+                        <th>Number of Beds</th>
+                        <th>Price Per Night</th>
+                        <th>Amenities</th>
+                    </tr>
+                `;
+                // Dodawanie danych pokoi do tabeli
+                data.forEach(room => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${room.number}</td>
+                        <td>${room.room_type}</td>
+                        <td>${room.capacity}</td>
+                        <td>${room.beds}</td>
+                        <td>${room.price_per_night}</td>
+                        <td>${room.amenities.join(', ')}</td>
+                    `;
+                    table.appendChild(row);
+                });
+
+                // Dodawanie tabeli do strony
+                document.getElementById('reservationForm').after(table);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 
     
     <script>
